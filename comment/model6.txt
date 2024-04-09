@@ -1,0 +1,3 @@
+Some data points lie close to the Ideal Line, indicating accurate predictions. 
+However, there are also cases where the predictions are significantly off.
+The density of the data points is higher at lower values and becomes sparse at higher values. This may indicate that your model has a higher complexity when dealing with lower-valued cases, and a lower complexity when dealing with higher-valued cases.

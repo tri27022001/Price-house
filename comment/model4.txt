@@ -1,0 +1,3 @@
+The scatter plot illustrates the relationship between actual house prices and house prices predicted by the Linear Regression model.
+The data points are scattered around the ideal line, indicating that the model is not perfect but still fits well.
+The predicted values are often higher than the actual values, suggesting that the model tends to overestimate house prices.

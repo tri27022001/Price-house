@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>House Price Prediction</title>
+    <style>
+        .form-group {
+            display: flex;
+            justify-content: space-between; /* Cách đều giữa label và input */
+            margin-bottom: 5px; /* Khoảng cách giữa các cặp label-input */
+            font-size: 20px;
+        }
+
+        .form-group label {
+            flex: 1;
+/*            margin-right: -300px; /* Khoảng cách giữa label và input */
+        }
+
+        .form-group input {
+            flex: 0;
+            margin-right: 1000px;
+        }
+
+        h1 {
+            text-align: center; /* Căn giữa tiêu đề theo chiều ngang */
+            margin: 0 auto; 
+        }
+
+        .submit-button {
+            background-color: #007bff; /* Màu nền của nút */
+            color: #fff; /* Màu chữ trắng */
+            border: none;
+            padding: 10px 30px;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+
+        .submit-button:hover {
+            background-color: #004ea1; /* Màu nền khi hover */
+        }
+
+        .file-upload{
+            margin-top: 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .visible {
+            display: block;
+        }
+
+        #message{
+            font-size: 40px;
+            margin-left: 50px;
+        }
+        #select{
+            font-size: 20px;
+        }
+
+        .dashboardButton{
+            padding: 10px 30px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .dashboardButton:hover {
+            background-color: #585858; /* Màu nền khi hover */
+        }
+
+        /* .commentdiv{
+            border: 1px solid #ffffff;
+            background-color: #dadada;
+            margin-right: 40px;
+            border-radius: 5px;
+        } */
+
+    </style>
+</head>
+<body>
+    <h1>House Price Prediction</h1>
+    <a href="{{ url_for('dashboard') }}"><button class="dashboardButton" id="dashboardButton">Dashboard</button></a>
+    <form method="post">
+        <label id="select" for="model">Select a model:</label>
+        <select name="model" id="model">
+            <option value="model1">Elastic net model</option>
+            <option value="model2">GB model</option>
+            <option value="model3">Huber model</option>
+            <option value="model4">LN model</option>
+            <option value="model5">Ridge model</option>
+            <option value="model6">RandomForest model</option>
+        </select>
+
+        <div id="select" class="file-upload">
+            <label for="csv-file">Upload a CSV file:</label>
+            <input type="file" name="csv-file" id="csv-file">
+        </div>
+
+        <h2>Enter input features:</h2>
+        <div class="form-group">
+            <label for="feature1">Month:</label>
+            <input type="number" name="feature1" id="feature1" min="1">
+        </div>
+        <div class="form-group">
+            <label for="feature2">Day:</label>
+            <input type="number" name="feature2" id="feature2" min="1">
+        </div>
+        <div class="form-group">
+            <label for="feature3">Year:</label>
+            <input type="number" name="feature3" id="feature3">
+        </div>
+        <div class="form-group">
+            <label for="feature4">Hour:</label>
+            <input type="number" name="feature4" id="feature4">
+        </div>
+        <div class="form-group">
+            <label for="feature5">Minute:</label>
+            <input type="number" name="feature5" id="feature5">
+        </div>
+        <div class="form-group">
+            <label for="feature6">Second:</label>
+            <input type="number" name="feature6" id="feature6">
+        </div>
+        <div class="form-group">
+            <label for="feature7">Geo_lat:</label>
+            <input type="number" name="feature7" id="feature7" step="any">
+        </div>
+        <div class="form-group">
+            <label for="feature8">Geo_lon:</label>
+            <input type="number" name="feature8" id="feature8" step="any">
+        </div>
+        <div class="form-group">
+            <label for="feature9">Region:</label>
+            <input type="number" name="feature9" id="feature9">
+        </div>
+        <div class="form-group">
+            <label for="feature10">Building_type:</label>
+            <input type="number" name="feature10" id="feature10">
+        </div>
+        <div class="form-group">
+            <label for="feature11">Level:</label>
+            <input type="number" name="feature11" id="feature11">
+        </div>
+        <div class="form-group">
+            <label for="feature12">Levels:</label>
+            <input type="number" name="feature12" id="feature12">
+        </div>
+        <div class="form-group">
+            <label for="feature13">Room:</label>
+            <input type="number" name="feature13" id="feature13">
+        </div>
+        <div class="form-group">
+            <label for="feature14">Area:</label>
+            <input type="number" name="feature14" id="feature14" step="any">
+        </div>
+        <div class="form-group">
+            <label for="feature15">Kitchen_area:</label>
+            <input type="number" name="feature15" id="feature15" step="any">
+        </div>
+        <div class="form-group">
+            <label for="feature16">Object_type:</label>
+            <input type="number" name="feature16" id="feature16">
+        </div>
+
+        <button class="submit-button" type="submit">Predict</button>
+    </form>
+
+    {% if predicted_price %}
+    <h2 id="predicted-price-section">Predicted Price:</h2>
+    <p style="font-size: 30px;">Predicted house price is: {{ predicted_price }}</p>
+    {% endif %}
+
+    {% if message %}
+    <div id="message">{{ message }}</div>
+    {% endif %}
+
+    <div class="form-group">
+        <label class="{% if show_model_image %}visible{% else %}hidden{% endif %}" for="model-image" style="font-size: 30px">Chart:</label>
+        <div id="model-image-container" class="{% if show_model_image %}visible{% else %}hidden{% endif %}">
+            <img src="{{ url_for('static', filename=model_image) }}" alt="Hình ảnh mô hình" id="model-image" style="max-width: 700px; margin-right: 500px;">
+        </div>
+    </div>
+
+    {% if model_description %}
+    <h3>Comment:</h3>
+    <div class="commentdiv" id="model-description">
+        {% for line in model_description %}
+            <p class="comment" style="font-size: 20px; margin-right: 20px; border: 5px solid rgb(235, 235, 235); background-color: rgb(235, 235, 235);">{{ line }}</p>
+        {% endfor %}
+    </div>
+    {% endif %} 
+
+    <script>
+        // Hàm được gọi khi trang web đã tải xong
+        function scrollToPredictedPrice() {
+            // Lấy đối tượng phần tử "Predicted Price"
+            var predictedPriceElement = document.getElementById('predicted-price-section');
+    
+            // Kiểm tra nếu phần tử tồn tại
+            if (predictedPriceElement) {
+                // Cuộn đến phần tử "Predicted Price" bằng cách sử dụng scrollIntoView
+                predictedPriceElement.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    
+        // Gọi hàm scrollToPredictedPrice khi trang web đã tải xong
+        window.onload = scrollToPredictedPrice;
+    </script>
+</body>
+</html>

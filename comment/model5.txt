@@ -1,0 +1,4 @@
+This is a scatter plot of actual values versus predicted values using the Ridge model.
+The chart illustrates a positive correlation between actual values and predicted values, with the majority of data points falling close to the ideal straight line.
+This indicates that the model performs well in predicting house prices.
+However, there are some exceptions that fall far from the ideal straight line, indicating that the model may not be able to accurately predict all house prices.

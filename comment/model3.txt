@@ -1,0 +1,3 @@
+The chart is a scatter plot of actual values versus predicted values using the Huber model.
+The data points are concentrated around the ideal line, indicating that the model is performing well.
+There are some exceptions, which may indicate that the model is not perfect.
